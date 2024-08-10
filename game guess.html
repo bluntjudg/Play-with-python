@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        #game-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #output {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #input-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <h1>Guess the Number Game</h1>
+    <div id="output"></div>
+    <div id="input-container">
+        <label for="guessInput">Your Guess:</label>
+        <input type="number" id="guessInput" min="1" step="1">
+        <button onclick="submitGuess()">Submit Guess</button>
+    </div>
+</div>
+
+<script>
+    let difficulty;
+    let number;
+    let numberOfGuesses;
+
+    function print(message) {
+        document.getElementById('output').innerHTML = message;
+    }
+
+    function getDifficulty() {
+        difficulty = prompt('Pick a difficulty level (1, 2, or 3):');
+        if (difficulty >= 1 && difficulty <= 3) {
+            startGame();
+        } else {
+            print('Please enter a valid difficulty level.');
+            getDifficulty();
+        }
+    }
+
+    function startGame() {
+        numberOfGuesses = 0;
+        number = Math.floor(Math.random() * 10 ** difficulty) + 1;
+        printPlay();
+    }
+
+    function printPlay() {
+        print('Let\'s play Guess the Number.');
+    }
+
+    function submitGuess() {
+        const guessedNumber = parseInt(document.getElementById('guessInput').value);
+        if (guessedNumber >= 1 && guessedNumber <= 10 ** difficulty) {
+            numberOfGuesses++;
+            checkGuess(guessedNumber);
+        } else {
+            print('Please enter a valid guess.');
+        }
+    }
+
+    function checkGuess(guessedNumber) {
+        if (guessedNumber === number) {
+            print(`You got it in ${numberOfGuesses} guesses!`);
+            playAgain();
+        } else {
+            const message = guessedNumber > number ? 'Too high. Guess again.' : 'Too low. Guess again.';
+            print(message);
+        }
+    }
+
+    function playAgain() {
+        const answer = confirm('Play again?');
+        if (answer) {
+            getDifficulty();
+        } else {
+            print('Goodbye!');
+        }
+    }
+
+    window.onload = getDifficulty;
+</script>
+
+</body>
+</html>
+
