@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Quote Generator</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #quote-container {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 400px;
+            margin-bottom: 20px;
+            text-align: center;
+            cursor: not-allowed;
+        }
+
+        #fetch-button {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 50px;
+            width: 400px;
+            text-align: center;
+            cursor: pointer;
+            animation-duration: 0ms;
+        }
+    </style>
+</head>
+<body>
+    <div id="quote-container">
+        <p>Loading...🔃</p>
+    </div>
+
+    <button id="fetch-button">Fetch New Quote</button>
+
+    <script>
+        // Function to fetch a random quote from the API
+        function fetchQuote() {
+            // Make an AJAX request
+            var xhr = new XMLHttpRequest();
+            //opening the connection 
+            xhr.open('GET', 'https://api.quotable.io/random', true);
+
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    // variable named quoteData(which the string is assigned as a object) , converts string to Js objects , recieves data from tnhe api as a string.
+                    var quoteData = JSON.parse(xhr.responseText);
+                    // Update the DOM with the quote
+                    document.getElementById('quote-container').innerHTML = '<p>"' + quoteData.content + '"</p><p>- ' + quoteData.author + '</p>';
+                } else {
+                    // Handle errors
+                    document.getElementById('quote-container').innerHTML = '<p>Failed to fetch quote. Please try again later.</p>';
+                }
+            };
+
+            // Sending the request
+            xhr.send();
+        }
+
+        // Function to handle button on-click event
+        document.getElementById('fetch-button').addEventListener('click', function () {
+            fetchQuote();
+        });
+
+        //Also Fetch a quote when the page loads
+        fetchQuote();
+    </script>
+</body>
+</html>
